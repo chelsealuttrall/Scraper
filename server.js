@@ -1,4 +1,5 @@
 var express = require("express");
+var expresshb = require("express-handlebars")
 var logger = require("morgan");
 var mongoose = require("mongoose");
 
@@ -27,19 +28,19 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/Homework_Scraper", { useNewUrlParser: true });
 
 // Routes
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
-  axios.get("http://www.echojs.com/").then(function(response) {
+  axios.get("https://www.bicycling.com/health-nutrition/#").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
     // Now, we grab every h2 within an article tag, and do the following:
-    $("article h2").each(function(i, element) {
+    $("div.simple_item liste-header-item list-header-small-item").each(function(i, element) {
       // Save an empty result object
       var result = {};
 
@@ -71,12 +72,30 @@ app.get("/scrape", function(req, res) {
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
   // TODO: Finish the route so it grabs all of the articles
+  db.Article.find({})
+  .then(function(dbArticle)
+  {
+    res.json(dbArticle);
+  }) 
+  .catch(function(err)
+  {
+    res.json(err);
+  });
 });
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
   // TODO
   // ====
+  db.Article.findOne({_id: req.params.id})
+
+  .populate("note")
+  .then(function(dbArticle) {
+    res.json(dbArticle);
+  })
+.catch(function(err){
+  res.json(err);
+});
   // Finish the route so it finds one article using the req.params.id,
   // and run the populate method with "note",
   // then responds with the article with the note included
@@ -86,9 +105,20 @@ app.get("/articles/:id", function(req, res) {
 app.post("/articles/:id", function(req, res) {
   // TODO
   // ====
+
   // save the new note that gets posted to the Notes collection
+  db.Note.create(req.body)
   // then find an article from the req.params.id
+  .then(function(dbNote){
+    return db.Article.findOneAndUpdate({_id: req.params.id}, {$set:{note: dbNote._id}}, {new:true})
+  })
   // and update it's "note" property with the _id of the new note
+  .then(function(dbArticle){
+    res.json(dbArticle);
+  })
+  .catch(function(err) {
+    res.json(err);
+  })
 });
 
 // Start the server
