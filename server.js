@@ -32,7 +32,11 @@ app.use(express.static("public"));
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 // Connect to the Mongo DB
+<<<<<<< HEAD
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+=======
+mongoose.connect("mongodb://localhost/Homework_Scraper", { useNewUrlParser: true });
+>>>>>>> e7f9a121a8b4804e08e7788c6c1e05b4486611e7
 
 // Routes
 
