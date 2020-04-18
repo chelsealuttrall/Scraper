@@ -2,7 +2,6 @@ Scraping with Mongoose
 
 Homework Assignment
 
-<<<<<<< HEAD
 # All the News That's Fit to Scrape
 
 ### Overview
@@ -149,5 +148,3 @@ If you have any questions about this project or the material we have covered, pl
 That goes threefold for this unit: MongoDB and Mongoose compose a challenging data management system. If there's anything you find confusing about these technologies, don't hesitate to speak with someone from the Boot Camp team.
 
 **Good Luck!**
-=======
->>>>>>> e7f9a121a8b4804e08e7788c6c1e05b4486611e7
