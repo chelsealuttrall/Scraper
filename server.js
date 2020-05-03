@@ -27,16 +27,14 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/unit18Populater", {
-  useNewUrlParser: true,
-});
+mongoose.connect("mongodb://localhost/funstuff", {useNewUrlParser: true});
 
 // Routes
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function (req, res) {
   // First, we grab the body of the html with axios
-  axios.get("http://www.echojs.com/").then(function (response) {
+  axios.get("https://gearjunkie.com/latest").then(function (response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
@@ -73,7 +71,7 @@ app.get("/articles", function (req, res) {
       res.json(dbArticle);
     })
     .catch(function (err) {
-      resp.json(err);
+      res.json(err);
     });
 });
 
